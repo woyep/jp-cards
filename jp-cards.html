@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>日语记忆卡片</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    .word-button-pair {
+     display: flex;
+     justify-content: space-around;
+     margin-top: 40px;
+    }
+
+    .word-box {
+     height: 80px;
+     width: 100%;
+     border: 1px solid #ccc;
+     margin-bottom: 10px;
+     line-height: 80px;
+     font-size: 24px;
+     background-color: white;
+    }
+
+    .word-field {
+     height: 80px;
+     width: 100%;
+     border: 1px solid #ccc;
+     margin-bottom: 10px;
+     line-height: 80px;
+     font-size: 24px;
+     background-color: white;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>日语词卡</h1>
+
+  <div class="word-button-pair">
+    <div class="word-box">
+      <div id="仮名" class="word-field"></div>
+      <button onclick="showField('仮名')">显示假名</button>
+    </div>
+    <div class="word-box">
+      <div id="漢字" class="word-field"></div>
+      <button onclick="showField('漢字')">显示中文</button>
+    </div>
+    <div class="word-box">
+      <div id="えいご" class="word-field"></div>
+      <button onclick="showField('えいご')">显示英文</button>
+    </div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 100px;">
+    <button onclick="nextWord()">下一个</button>
+  </div>
+
+  <script>
+    let words = [];
+    let currentIndex = 0;
+
+    fetch('words.json')
+      .then(res => res.json())
+      .then(data => {
+        words = data;
+        clearFields();  // 初始化为白色
+      });
+
+    function clearFields() {
+      document.getElementById("仮名").innerText = "";
+      document.getElementById("漢字").innerText = "";
+      document.getElementById("えいご").innerText = "";
+    }
+
+    function showField(type) {
+      clearFields();
+      const word = words[currentIndex];
+      if (type === "仮名") {
+        document.getElementById("仮名").innerText = word["仮名"];
+      } else if (type === "漢字") {
+        document.getElementById("漢字").innerText = word["漢字"];
+      } else if (type === "えいご") {
+        document.getElementById("えいご").innerText = word["えいご"];
+      }
+    }
+
+    function nextWord() {
+      currentIndex = (currentIndex + 1) % words.length;
+      clearFields();
+    }
+  </script>
+
+</body>
+</html>
